@@ -44,12 +44,89 @@ class Scanner {
       case '-': addToken(MINUS); break;
       case '+': addToken(PLUS); break;
       case ';': addToken(SEMICOLON); break;
-      case '*': addToken(STAR); break; 
+      case '*': addToken(STAR); break;
+      case '!':
+        addToken(match('=') ? BANG_EQUAL : BANG);
+        break;
+      case '=':
+        addToken(match('=') ? EQUAL_EQUAL : EQUAL);
+        break;
+      case '<':
+        addToken(match('=') ? LESS_EQUAL : LESS);
+        break;
+      case '>':
+        addToken(match('=') ? GREATER_EQUAL : GREATER);
+        break;
+      case '/':
+        if (match('/')) {
+          // A comment goes until the end of the line.
+          while (peek() != '\n' && !isAtEnd()) advance();
+        } else {
+          addToken(SLASH);
+        }
+        break;
+
+      case '\n':
+        line++;
+      case ' ':
+      case '\r':
+      case '\t':
+        break;
+
+      case '"': string(); break;
+
       default:
-        Lox.error(line, "Unexpected character.");
+        if (isDigit(c)) {
+          number();
+        } else {
+          Lox.error(line, "Unexpected character.");
+        }
         break;
     }
   }
+
+  private void number() {
+    while (isDigit(peek())) advance();
+    if (peek() == '.') advance();
+    while (isDigit(peek())) advance();
+
+    addToken(NUMBER, Double.parseDouble(source.substring(start, current)));
+  }
+
+  private void string() {
+    while (peek() != '"' && !isAtEnd()) {
+      if (peek() == '\n') line++;
+      advance();
+    }
+
+    if (isAtEnd()) {
+      Lox.error(line, "Unterminated string.");
+      return;
+    }
+
+    // For the closing "
+    advance();
+
+    String value = source.substring(start+1, current - 1);
+    addToken(STRING, value);
+  }
+
+  private boolean match(char expected) {
+    if (isAtEnd()) return false;
+    if (source.charAt(current) != expected) return false;
+
+    current++;
+    return true;
+  }
+
+  private char peek() {
+    if (isAtEnd()) return '\0';
+    return source.charAt(current);
+  }
+
+  private boolean isDigit(char c) {
+    return c >= '0' && c <= '9';
+  } 
 
   private char advance() {
     return source.charAt(current++);
