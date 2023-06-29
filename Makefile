@@ -1,10 +1,13 @@
+PACKAGE=me/timbeck/lox
 # Compile the Java file to a class file.
-Hello.class: src/Hello.java
-	@ javac -d target src/Hello.java
+Lox.class: src/Lox.java
+	@ javac -d target src/*.java
 
 # Convenience target to build and run it.
-run: Hello.class
-	@ cd target && java Hello
-
-# Tell make that "run" is not the name of a file.
 .PHONY: run
+run: Lox.class
+	@ cd target && java $(PACKAGE)/Lox
+
+.PHONY: clean
+clean:
+	@ rm -rf target
