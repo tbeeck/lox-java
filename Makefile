@@ -4,6 +4,8 @@ TOOL_PACKAGE=$(PACKAGE)/tool
 Lox.class: src/Lox.java
 	@ javac -d target src/*.java
 
+AstPrinter.class: src/AstPrinter.java Lox.class
+
 GenerateAst.class: tool/GenerateAst.java
 	@ javac -d target tool/*.java
 
@@ -11,10 +13,13 @@ GenerateAst.class: tool/GenerateAst.java
 run: Lox.class
 	@ cd target && java $(PACKAGE)/Lox
 
+print-ast: AstPrinter.class
+	@ cd target && java $(PACKAGE)/AstPrinter
+
 generate: GenerateAst.class
 	@ cd target && java $(TOOL_PACKAGE)/GenerateAst ../src
 
 clean:
 	@ rm -rf target
 
-.PHONY: run clean
+.PHONY: run clean generate print-ast
