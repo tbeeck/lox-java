@@ -1,13 +1,20 @@
 PACKAGE=me/timbeck/lox
+TOOL_PACKAGE=$(PACKAGE)/tool
 # Compile the Java file to a class file.
 Lox.class: src/Lox.java
 	@ javac -d target src/*.java
 
-# Convenience target to build and run it.
-.PHONY: run
+GenerateAst.class: tool/GenerateAst.java
+	@ javac -d target tool/*.java
+
+# Convenience targets
 run: Lox.class
 	@ cd target && java $(PACKAGE)/Lox
 
-.PHONY: clean
+generate: GenerateAst.class
+	@ cd target && java $(TOOL_PACKAGE)/GenerateAst
+
 clean:
 	@ rm -rf target
+
+.PHONY: run clean
