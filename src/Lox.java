@@ -8,8 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import me.timbeck.lox.*;
-
 public class Lox {
   static boolean hadError = false;
 

@@ -1,7 +1,5 @@
 package me.timbeck.lox;
 
-import me.timbeck.*;
-
 public abstract class Expr {
     static class Literal extends Expr {
         final Token val;
