@@ -1,30 +1,36 @@
 package me.timbeck.lox;
 
-public abstract class Expr {
-    static class Literal extends Expr {
-        final Token val;
-        Literal(Token val) {
-            this.val = val;
-        }
-    }
+import java.util.List;
 
-    static class Unary extends Expr {
-        final Token operator;
-        final Expr expression;
-        Unary(Token op, Expr expression) {
-            this.operator = op;
-            this.expression = expression;
-        }
+abstract class Expr {
+  static class Binary extends Expr {
+    final Expr left;
+    final Token operator;
+    final Expr right;
+    Binary(Expr left, Token operator, Expr right) {
+      this.left = left;
+      this.operator = operator;
+      this.right = right;
     }
-
-    static class Binary extends Expr {
-        final Expr left;
-        final Token operator;
-        final Expr right;
-        Binary(Expr left, Token op, Expr right) {
-            this.left = left;
-            this.operator = op;
-            this.right = right;
-        }
+  }
+  static class Grouping extends Expr {
+    final Expr expression;
+    Grouping(Expr expression) {
+      this.expression = expression;
     }
+  }
+  static class Literal extends Expr {
+    final Object value;
+    Literal(Object value) {
+      this.value = value;
+    }
+  }
+  static class Unary extends Expr {
+    final Token operator;
+    final Expr right;
+    Unary(Token operator, Expr right) {
+      this.operator = operator;
+      this.right = right;
+    }
+  }
 }

@@ -12,7 +12,7 @@ run: Lox.class
 	@ cd target && java $(PACKAGE)/Lox
 
 generate: GenerateAst.class
-	@ cd target && java $(TOOL_PACKAGE)/GenerateAst src
+	@ cd target && java $(TOOL_PACKAGE)/GenerateAst ../src
 
 clean:
 	@ rm -rf target
